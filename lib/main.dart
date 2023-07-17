@@ -5,7 +5,7 @@ import 'dart:ui' as ui;
 import 'package:complex/complex.dart';
 import 'package:flutter/material.dart';
 
-const maxIter = 512;
+const maxIter = 1000;
 
 var x0 = -2.0;
 var x1 = 1.0;
@@ -17,7 +17,7 @@ int _mandelbrot(double x, double y) {
   var z = C;
   for (int i = 1; i < maxIter; i++) {
     z = (z * z) + C;
-    if (z.abs() > 2.0) {
+    if (z.abs() > 20.0) {
       return i;
     }
   }
@@ -26,11 +26,14 @@ int _mandelbrot(double x, double y) {
 
 Future<ui.Image> drawMandelbrot(int width, int height) async {
   Color getColorFromValue(int index) {
-    final hue = (index.toDouble() / maxIter) *
-        360.0; // 0부터 128까지의 값을 0부터 360까지의 색상(Hue) 값으로 변환
-    const saturation = 1.0; // 채도(Saturation) 값은 일정하게 설정
+    const div = 256;
+    final divIndex = index % div;
+    final hue = ((divIndex.toDouble() / (div)) * 360.0) +
+        25; // 0부터 128까지의 값을 0부터 360까지의 색상(Hue) 값으로 변환
+    const saturation = 0.75; // 채도(Saturation) 값은 일정하게 설정
     const value = 1.0; // 명도(Value) 값은 일정하게 설정
-    final color = HSVColor.fromAHSV(1.0, hue, saturation, value).toColor();
+    final color =
+        HSVColor.fromAHSV(1.0, hue % 360, saturation, value).toColor();
     return color;
   }
 
