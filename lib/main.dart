@@ -5,6 +5,25 @@ import 'dart:ui' as ui;
 import 'package:complex/complex.dart';
 import 'package:flutter/material.dart';
 
+const colors = [
+  Color.fromARGB(255, 66, 30, 15),
+  Color.fromARGB(255, 25, 7, 26),
+  Color.fromARGB(255, 9, 1, 47),
+  Color.fromARGB(255, 4, 4, 73),
+  Color.fromARGB(255, 0, 7, 100),
+  Color.fromARGB(255, 12, 44, 138),
+  Color.fromARGB(255, 24, 82, 177),
+  Color.fromARGB(255, 57, 125, 209),
+  Color.fromARGB(255, 134, 181, 229),
+  Color.fromARGB(255, 211, 236, 248),
+  Color.fromARGB(255, 241, 233, 191),
+  Color.fromARGB(255, 248, 201, 95),
+  Color.fromARGB(255, 255, 170, 0),
+  Color.fromARGB(255, 204, 128, 0),
+  Color.fromARGB(255, 153, 87, 0),
+  Color.fromARGB(255, 106, 52, 3),
+];
+
 const maxIter = 1000;
 
 var x0 = -2.0;
@@ -25,18 +44,6 @@ int _mandelbrot(double x, double y) {
 }
 
 Future<ui.Image> drawMandelbrot(int width, int height) async {
-  Color getColorFromValue(int index) {
-    const div = 256;
-    final divIndex = index % div;
-    final hue = ((divIndex.toDouble() / (div)) * 360.0) +
-        25; // 0부터 128까지의 값을 0부터 360까지의 색상(Hue) 값으로 변환
-    const saturation = 0.75; // 채도(Saturation) 값은 일정하게 설정
-    const value = 1.0; // 명도(Value) 값은 일정하게 설정
-    final color =
-        HSVColor.fromAHSV(1.0, hue % 360, saturation, value).toColor();
-    return color;
-  }
-
   final c = Completer<ui.Image>();
 
   final w = x1 - x0;
@@ -53,7 +60,7 @@ Future<ui.Image> drawMandelbrot(int width, int height) async {
       int count = _mandelbrot(x, y);
       if (count < maxIter) {
         // 발산은 발산 Count별 색상 출력
-        final color = getColorFromValue(count);
+        final color = colors[count % colors.length];
         pixels.add(color.red);
         pixels.add(color.green);
         pixels.add(color.blue);
